@@ -12,7 +12,7 @@ BEARER_TOKEN = all_keys[4]
 auth = tweepy.OAuthHandler(CONSUMER_KEY, CONSUMER_SECRET_KEY)
 auth.set_access_token(ACCESS_TOKEN, ACCESS_SECRET_TOKEN)
 api = tweepy.API(auth, wait_on_rate_limit=True)
-
+#poop
 
 # Bot searches for tweets containing certain keywords
 # class MyStream(tweepy.StreamingClient):
