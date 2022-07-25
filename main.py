@@ -36,7 +36,7 @@ def save_newest_id(newest_id, file='Last_seen_text.txt'):
 # Replies to @ mentions towards the bot in real time. Sends simple replies
 def reply_to_mentions():
     newest_seen_id = get_newest_id('Last_seen_text.txt')
-    at_mentions = api.mentions_timeline(newest_seen_id, tweet_mode='extended')
+    at_mentions = api.mentions_timeline(since_id=newest_seen_id)
     print("Finding and replying to mentions....")
 
     for current_mention in reversed(at_mentions):
@@ -45,11 +45,16 @@ def reply_to_mentions():
         newest_seen_id = current_mention.id
         save_newest_id(newest_seen_id, 'Last_seen_text.txt')
         print(str(current_mention.id) + "-" + current_mention.text)
+        api.create_favorite(id=current_mention.id)
+        print("tweet is liked!\n")
         # Sends a 'Hook Em!' if word 'Hook' is located within the text
         if "hook" in current_mention.text.lower():
             print("A Hook Em is found!")
             print("Currently responding back...")
-            api.update_status('@' + current_mention.user.screen_name + ' Hook Em!!!', current_mention.id)
+            api.update_status(status='@' + current_mention.user.screen_name + ' Hook Em!!!',
+                              in_reply_to_status_id=current_mention.id)
+
+    print("")
 
 
 # Lists out generic info about a specific user
