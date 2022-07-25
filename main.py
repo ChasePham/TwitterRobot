@@ -34,7 +34,7 @@ def save_newest_id(newest_id, file='Last_seen_text.txt'):
     return
 
 
-# Replies to @ mentions towards the bot in real time. Sends simple replies
+# Replies to @ mentions towards the bot in real time. Sends simple quotes and jokes or a Hook em!
 def reply_to_mentions():
     newest_seen_id = get_newest_id('Last_seen_text.txt')
     at_mentions = api.mentions_timeline(since_id=newest_seen_id)
@@ -138,10 +138,9 @@ main()
 # store name. This will make sure there aren't duplicates (CHECK)
 
 # Things to do with twitterBot:
-# Create daily polls about stuff (Confused a lil)
-# Tweet to UT accounts, something supportive everytime they post something
+# Tweet to UT accounts, something supportive everytime they post something "CURRENT"
 # Retweet UT associated events or anything in general
-# Do something when someone @'s this bot, this can be like a UT happy quote or something like that
+# Do something when someone @'s this bot, this can be like a UT happy quote or something like that "CHECK"
 # In addition to function on top, when someone @'s and # something specific like "event",
 # we can retweet the post, and say that there is an event happening
 
