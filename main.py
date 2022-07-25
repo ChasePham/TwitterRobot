@@ -9,41 +9,20 @@ ACCESS_TOKEN = all_keys[2]
 ACCESS_SECRET_TOKEN = all_keys[3]
 BEARER_TOKEN = all_keys[4]
 
+
 auth = tweepy.OAuthHandler(CONSUMER_KEY, CONSUMER_SECRET_KEY)
 auth.set_access_token(ACCESS_TOKEN, ACCESS_SECRET_TOKEN)
 api = tweepy.API(auth, wait_on_rate_limit=True)
 
 
-# Bot searches for tweets containing certain keywords
-# class MyStream(tweepy.StreamingClient):
-#
-#     # This function gets called when a tweet passes the stream
-#     def on_tweet(self, tweet):
-#
-#         # Retweeting the tweet
-#         try:
-#             # Retweet
-#
-#             # Printing Tweet
-#             print(tweet.text + "--------------------------------------" + '\n')
-#             # Delay
-#             time.sleep(3)
-#         except Exception as error:
-#             # Error
-#             print(error)
-#
-#
-# # Creating Stream object
-# stream = MyStream(bearer_token=BEARER_TOKEN)
-#
-# # Adding terms to search rules
-# rule = tweepy.StreamRule("(#UTAustin OR #Paetow) (-is:retweet -is:reply)")
-# stream.add_rules(rule, dry_run=True)
-#
-# # Starting stream
-# stream.filter()
+# Replies to @ mentions towards the bot in real time. Sends simple replies
+def reply_to_mentions():
+    at_mentions = api.mentions_timeline()
+    for current_mention in at_mentions:
+        print(str(current_mention.id) + "-" + current_mention.text)
 
 
+# Lists out generic info about a specific user
 def find_individual_info(name):
     user = api.get_user(screen_name=name)
     print("The users follower count: " + str(user.followers_count))
@@ -58,17 +37,20 @@ def find_individual_info(name):
     print('Verified? ' + str(user.verified))
 
 
+# finds generic info over a range of people
 def find_list_info(list_of_following):
     for individual in list_of_following:
         find_individual_info(individual.screen_name)
         print("\n")
 
-
+# Follows individual people and adds that to the list of followers
 def follow_people(person):
     friends = api.get_friends(count=200) # max
     listofusernames = []
     for individual in friends:
         listofusernames.append(individual.screen_name)
+    if person == "" or person == " ":
+        return listofusernames
     if not(person in listofusernames):
         api.create_friendship(screen_name=person)
         listofusernames.append(person)
@@ -87,10 +69,12 @@ def follow_people(person):
 #Read this link on how streams work before moving on
 
 
+# Main functions to run the program
 def main():
-    find_individual_info('UTAustin')
-    # follow_people()
+    # find_individual_info('UTAustin')
+    #listofusernames = follow_people("")
     # find_list_info()
+    reply_to_mentions()
 
 
 main()
