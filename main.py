@@ -1,4 +1,5 @@
 import tweepy
+from textblob import TextBlob
 import time
 import random
 
@@ -34,25 +35,36 @@ def save_newest_id(newest_id, file='Last_seen_text.txt'):
     return
 
 
-# Replies to @ mentions towards the bot in real time. Sends simple quotes and jokes or a Hook em!
+# Replies to @ mentions towards the bot in real time. Sends simple quotes, jokes, Hook'em's, or positive or bad
+# mentions to the bot.
 def reply_to_mentions():
     newest_seen_id = get_newest_id('Last_seen_text.txt')
     at_mentions = api.mentions_timeline(since_id=newest_seen_id)
     print("Finding and replying to mentions....")
 
+    # Loops through the mentions from beginning to present time. Once present time hits
+    # it will save that tweet within the text file.
     for current_mention in reversed(at_mentions):
-        # Loops through the mentions from beginning to present time. Once present time hits
-        # it will save that tweet within the text file.
         newest_seen_id = current_mention.id
         save_newest_id(newest_seen_id, 'Last_seen_text.txt')
         print(str(current_mention.id) + "-" + current_mention.text)
         api.create_favorite(id=current_mention.id)
         print("tweet is liked!\n")
-        # Sends a 'Hook Em!' if word 'Hook' is located within the text
+
+        # Checks the tweet if it's giving a good or bad sentiment score
+        mention_analysis = TextBlob(current_mention.text)
+        mention_analysis_total = mention_analysis.sentiment.polarity
+        print("Tweet has a sentiment score of: " + mention_analysis_total)
+
         if "hook" in current_mention.text.lower():
             print("A Hook Em is found!")
             print("Currently responding back...")
             api.update_status(status='@' + current_mention.user.screen_name + ' Hook Em!!!',
+                              in_reply_to_status_id=current_mention.id)
+        elif mention_analysis_total < 0:
+            print("Bad text sent, processing a response...")
+            response = "I'm sorry, but I do not like your tweet :("
+            api.update_status(status='@' + current_mention.user.screen_name + " " + response,
                               in_reply_to_status_id=current_mention.id)
         else:
             print("Returning a funny joke or quick fact...")
