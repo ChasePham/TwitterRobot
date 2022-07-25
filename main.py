@@ -1,5 +1,6 @@
 import tweepy
 import time
+import random
 
 
 all_keys = open('Keys', 'r').read().splitlines()
@@ -52,6 +53,12 @@ def reply_to_mentions():
             print("A Hook Em is found!")
             print("Currently responding back...")
             api.update_status(status='@' + current_mention.user.screen_name + ' Hook Em!!!',
+                              in_reply_to_status_id=current_mention.id)
+        else:
+            print("Returning a funny joke or quick fact...")
+            all_lines = open('Quick_Facts.txt').read().splitlines()
+            random_text = random.choice(all_lines)
+            api.update_status(status='@' + current_mention.user.screen_name + " " + random_text,
                               in_reply_to_status_id=current_mention.id)
 
     print("")
