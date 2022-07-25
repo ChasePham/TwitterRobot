@@ -15,11 +15,41 @@ auth.set_access_token(ACCESS_TOKEN, ACCESS_SECRET_TOKEN)
 api = tweepy.API(auth, wait_on_rate_limit=True)
 
 
+# Retrieves the latest ID within the text file, this allows the code to not repeat retweets through
+# the many @'s the bot may receive.
+def get_newest_id(file='Last_seen_text.txt'):
+    file_read = open(file, 'r')
+    newest_id = int(file_read.read().strip())
+    file_read.close()
+    return newest_id
+
+
+# Once a new @ mention is brought for the bot, it saves that text ID into the Last_seen_text.txt.
+# The purpose is to update the latest @ mention constantly, so no repeats occur.
+def save_newest_id(newest_id, file='Last_seen_text.txt'):
+    file_write = open(file, 'w')
+    file_write.write(str(newest_id))
+    file_write.close()
+    return
+
+
 # Replies to @ mentions towards the bot in real time. Sends simple replies
 def reply_to_mentions():
-    at_mentions = api.mentions_timeline()
-    for current_mention in at_mentions:
+    newest_seen_id = get_newest_id('Last_seen_text.txt')
+    at_mentions = api.mentions_timeline(newest_seen_id, tweet_mode='extended')
+    print("Finding and replying to mentions....")
+
+    for current_mention in reversed(at_mentions):
+        # Loops through the mentions from beginning to present time. Once present time hits
+        # it will save that tweet within the text file.
+        newest_seen_id = current_mention.id
+        save_newest_id(newest_seen_id, 'Last_seen_text.txt')
         print(str(current_mention.id) + "-" + current_mention.text)
+        # Sends a 'Hook Em!' if word 'Hook' is located within the text
+        if "hook" in current_mention.text.lower():
+            print("A Hook Em is found!")
+            print("Currently responding back...")
+            api.update_status('@' + current_mention.user.screen_name + ' Hook Em!!!', current_mention.id)
 
 
 # Lists out generic info about a specific user
@@ -43,6 +73,7 @@ def find_list_info(list_of_following):
         find_individual_info(individual.screen_name)
         print("\n")
 
+
 # Follows individual people and adds that to the list of followers
 def follow_people(person):
     friends = api.get_friends(count=200) # max
@@ -56,7 +87,7 @@ def follow_people(person):
         listofusernames.append(person)
         total = len(listofusernames)
         print("total people you follow: " + str(total))
-        file = open("followlist.txt","w")
+        file = open("followlist.txt", "w")
         for names in listofusernames:
             file.write(names + "\n")
         file.close()
@@ -65,26 +96,34 @@ def follow_people(person):
     return listofusernames
 
 
-#https://developer.twitter.com/en/docs/twitter-api/tweets/filtered-stream/integrate/build-a-rule
-#Read this link on how streams work before moving on
+# https://developer.twitter.com/en/docs/twitter-api/tweets/filtered-stream/integrate/build-a-rule
+# Read this link on how streams work before moving on
 
 
 # Main functions to run the program
 def main():
+    # Quick Info functions:
     # find_individual_info('UTAustin')
-    #listofusernames = follow_people("")
+    # listofusernames = follow_people("")
     # find_list_info()
-    reply_to_mentions()
+    # Repetitive constant functions:
+    while True:
+        reply_to_mentions()
+        time.sleep(30)
 
 
 main()
 
 
 # Functions that we could create:
-# Info about a specific user, basically the layout about the user (optional, not really needed, but nice and quick info) (CHECK)
-# Additional to the first function above, create one that loops through a list or map of users, similar to first. (CHECK)
-# Create a txt file of UT associated accounts, then have a function read in that list and follow those people (CHECK)
-# Create a txt file associated with two functions; a retrieve name and store name. This will make sure there aren't duplicates
+# Info about a specific user, basically the layout about the user (optional,
+# not really needed, but nice and quick info) (CHECK)
+# Additional to the first function above, create one that loops through
+# a list or map of users, similar to first. (CHECK)
+# Create a txt file of UT associated accounts, then have a function read
+# in that list and follow those people (CHECK)
+# Create a txt file associated with two functions; a retrieve name and
+# store name. This will make sure there aren't duplicates (CHECK)
 
 # Things to do with twitterBot:
 # Create daily polls about stuff (Confused a lil)
