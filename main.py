@@ -120,20 +120,26 @@ def follow_people(person):
     return listofusernames
 
 
-# https://developer.twitter.com/en/docs/twitter-api/tweets/filtered-stream/integrate/build-a-rule
-# Read this link on how streams work before moving on
+# Filters the tweets to specifically only people that I am following.
+def find_tweets_from_following(list_of_user_names):
+    user_ids = []
+    # Gets the ID form from the list of user-names and adds it to a new list.
+    for user in list_of_user_names:
+        user_ids.append(api.get_user(screen_name=user).id)
+    print(user_ids)
 
 
 # Main functions to run the program
 def main():
     # Quick Info functions:
     # find_individual_info('UTAustin')
-    # listofusernames = follow_people("")
+    listofusernames = follow_people("")
+    find_tweets_from_following(listofusernames)
     # find_list_info()
     # Repetitive constant functions:
-    while True:
-        reply_to_mentions()
-        time.sleep(30)
+    # while True:
+    #     reply_to_mentions()
+    #     time.sleep(30)
 
 
 main()
@@ -153,6 +159,6 @@ main()
 # Tweet to UT accounts, something supportive everytime they post something "CURRENT"
 # Retweet UT associated events or anything in general
 # Do something when someone @'s this bot, this can be like a UT happy quote or something like that "CHECK"
-# In addition to function on top, when someone @'s and # something specific like "event",
-# we can retweet the post, and say that there is an event happening
+# In addition to function on top, when someone @'s and # something specific like "event", "CHECK"
+# we can retweet the post, and say that there is an event happening "CHECK"
 
