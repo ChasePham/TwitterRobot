@@ -121,9 +121,26 @@ def follow_people(person):
 
 # To find and locate tweets from friends, we can do the same process we did with finding and replying
 # to @'s! We can use the API.home_timeline() method. This will return the 20 most recent tweets coming from
-# friends and the user.
+# friends and the user. This process will include three functions; get, write, and the actual retweet function.
 
 
+# Retrieves the recent tweet from the text file. This is to recall the earliest tweet recorded
+def get_recent_retweet():
+    file_read = open('Last_seen_retweet.txt', 'r')
+    latest_tweet_id = int(file_read.read().strip())
+    file_read.close()
+    return latest_tweet_id
+
+
+# Stores a newly updated tweet received in the homepage, and store it into the text file.
+def store_recent_retweet(latest_id):
+    file_write = open('Last_seen_retweet.txt', 'w')
+    file_write.write(str(latest_id))
+    file_write.close()
+
+
+# Retweets important events and emergencies that are happening around campus. These are limited to people
+# I am following.
 def retweet_tweets():
     print()
 
