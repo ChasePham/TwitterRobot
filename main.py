@@ -145,6 +145,7 @@ def retweet_tweets():
     print("Finding UT Austin related events to retweet and liking others...")
     recent_retweet = get_recent_retweet()
     all_tweets = api.home_timeline(since_id=recent_retweet, exclude_replies=True)
+    # Words that will are strongly related to an event happening, will retweet if word is in sentence.
     words = ['event', 'celebrate', 'emergency', 'celebration', 'join', 'opportunity', 'come']
     for current_tweet in reversed(all_tweets):
         recent_tweet = current_tweet.id
@@ -182,9 +183,11 @@ def main():
 
     # Repetitive constant functions:
     while True:
-        # reply_to_mentions()
+        reply_to_mentions()
+        print("")
         retweet_tweets()
-        time.sleep(30)
+        time.sleep(20)
+        print("")
 
 
 main()
