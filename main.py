@@ -150,7 +150,7 @@ def retweet_tweets():
     all_tweets = api.home_timeline(since_id=recent_retweet, exclude_replies=True)
     # Words that will are strongly related to an event happening, will retweet if word is in sentence.
     words = ['event', 'celebrate', 'emergency', 'celebration',
-             'join', 'opportunity', 'come', 'gather', 'connect', 'present', 'sign', 'invite']
+             'join', 'opportunity', 'come', 'gather', 'connect', 'present', 'sign', 'invite', 'alert']
     for current_tweet in reversed(all_tweets):
         recent_tweet = current_tweet.id
         store_recent_retweet(recent_tweet)
