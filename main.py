@@ -142,19 +142,29 @@ def store_recent_retweet(latest_id):
 # Retweets important events and emergencies that are happening around campus. These are limited to people
 # I am following.
 def retweet_tweets():
-    print()
+    print("Finding UT Austin related events to retweet and liking others...")
+    recent_retweet = get_recent_retweet()
+    all_tweets = api.home_timeline(since_id=recent_retweet, exclude_replies=True)
+    words = ['event', 'celebrate', 'emergency', 'celebration', 'join']
+    for current_tweet in reversed(all_tweets):
+        recent_tweet = current_tweet.id
+        store_recent_retweet(recent_tweet)
+        api.create_favorite(recent_tweet)
+        if words in current_tweet.text.lower():
+            print("test good!!!!")
 
 
 # Main functions to run the program
 def main():
     # Quick Info functions:
     # find_individual_info('UTAustin')
-    listofusernames = follow_people("")
+    # listofusernames = follow_people("")
     # find_list_info()
     # Repetitive constant functions:
-    # while True:
-    #     reply_to_mentions()
-    #     time.sleep(30)
+    while True:
+        # reply_to_mentions()
+        retweet_tweets()
+        time.sleep(30)
 
 
 main()
