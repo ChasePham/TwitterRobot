@@ -145,13 +145,13 @@ def retweet_tweets():
     print("Finding UT Austin related events to retweet and liking others...")
     recent_retweet = get_recent_retweet()
     all_tweets = api.home_timeline(since_id=recent_retweet, exclude_replies=True)
-    words = ['event', 'celebrate', 'emergency', 'celebration', 'join']
+    words = ['event', 'celebrate', 'emergency', 'celebration', 'join', 'opportunity', 'come']
     for current_tweet in reversed(all_tweets):
         recent_tweet = current_tweet.id
         store_recent_retweet(recent_tweet)
         api.create_favorite(recent_tweet)
         current_tweet_text = current_tweet.text.lower()
-        print(current_tweet_text)
+        print("The current tweet is: " + current_tweet_text)
         check = False
         # Checks if the current tweet contains one of these variations of words
         for word in words:
@@ -160,8 +160,13 @@ def retweet_tweets():
                 break
 
         if check:
-            print("Found Tweet!!!, currently retweeting...")
+            print("Found Tweet!!!, currently retweeting and liking tweet..." + "\n")
+            message = ' Very Cool!!!'
+            api.update_status('@' + current_tweet.user.screen_name + message, in_reply_to_status_id=recent_tweet)
             api.retweet(recent_tweet)
+            print("Tweet successfully retweeted!")
+        else:
+            print("tweet liked!")
 
 
 # Main functions to run the program
@@ -170,6 +175,7 @@ def main():
     # find_individual_info('UTAustin')
     # listofusernames = follow_people("")
     # find_list_info()
+
     # Repetitive constant functions:
     while True:
         # reply_to_mentions()
@@ -191,8 +197,8 @@ main()
 # store name. This will make sure there aren't duplicates (CHECK)
 
 # Things to do with twitterBot:
-# Tweet to UT accounts, something supportive everytime they post something "CURRENT"
-# Retweet UT associated events or anything in general
+# Tweet to UT accounts, something supportive everytime they post something "CHECK"
+# Retweet UT associated events or anything in general (CHECK)
 # Do something when someone @'s this bot, this can be like a UT happy quote or something like that "CHECK"
 # In addition to function on top, when someone @'s and # something specific like "event", "CHECK"
 # we can retweet the post, and say that there is an event happening "CHECK"
