@@ -119,14 +119,13 @@ def follow_people(person):
         print("You already follow: " + person)
     return listofusernames
 
+# To find and locate tweets from friends, we can do the same process we did with finding and replying
+# to @'s! We can use the API.home_timeline() method. This will return the 20 most recent tweets coming from
+# friends and the user.
 
-# Filters the tweets to specifically only people that I am following.
-def find_tweets_from_following(list_of_user_names):
-    user_ids = []
-    # Gets the ID form from the list of user-names and adds it to a new list.
-    for user in list_of_user_names:
-        user_ids.append(api.get_user(screen_name=user).id)
-    print(user_ids)
+
+def retweet_tweets():
+    print()
 
 
 # Main functions to run the program
@@ -134,7 +133,6 @@ def main():
     # Quick Info functions:
     # find_individual_info('UTAustin')
     listofusernames = follow_people("")
-    find_tweets_from_following(listofusernames)
     # find_list_info()
     # Repetitive constant functions:
     # while True:
