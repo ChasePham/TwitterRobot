@@ -55,25 +55,28 @@ def reply_to_mentions():
         mention_analysis = TextBlob(current_mention.text)
         mention_analysis_total = mention_analysis.sentiment.polarity
         print("Tweet has a sentiment score of: " + mention_analysis_total)
-
-        if "hook" in current_mention.text.lower():
-            print("A Hook Em is found!")
-            print("Currently responding back...")
-            api.update_status(status='@' + current_mention.user.screen_name + ' Hook Em!!!',
-                              in_reply_to_status_id=current_mention.id)
-        elif mention_analysis_total < 0:
-            print("Bad text sent, processing a response...")
-            response = "I'm sorry, but I do not like your tweet :("
-            api.update_status(status='@' + current_mention.user.screen_name + " " + response,
-                              in_reply_to_status_id=current_mention.id)
-        else:
-            print("Returning a funny joke or quick fact...")
-            all_lines = open('Quick_Facts.txt').read().splitlines()
-            random_text = random.choice(all_lines)
-            api.update_status(status='@' + current_mention.user.screen_name + " " + random_text,
-                              in_reply_to_status_id=current_mention.id)
+        analyze_mention_tweet(current_mention, mention_analysis_total)
 
     print("")
+
+
+def analyze_mention_tweet(current_mention, mention_analysis_total):
+    if "hook" in current_mention.text.lower():
+        print("A Hook Em is found!")
+        print("Currently responding back...")
+        api.update_status(status='@' + current_mention.user.screen_name + ' Hook Em!!!',
+                          in_reply_to_status_id=current_mention.id)
+    elif mention_analysis_total < 0:
+        print("Bad text sent, processing a response...")
+        response = "I'm sorry, but I do not like your tweet :("
+        api.update_status(status='@' + current_mention.user.screen_name + " " + response,
+                          in_reply_to_status_id=current_mention.id)
+    else:
+        print("Returning a funny joke or quick fact...")
+        all_lines = open('Quick_Facts.txt').read().splitlines()
+        random_text = random.choice(all_lines)
+        api.update_status(status='@' + current_mention.user.screen_name + " " + random_text,
+                          in_reply_to_status_id=current_mention.id)
 
 
 # Lists out generic info about a specific user
