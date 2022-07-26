@@ -151,22 +151,26 @@ def retweet_tweets():
         store_recent_retweet(recent_tweet)
         api.create_favorite(recent_tweet)
         current_tweet_text = current_tweet.text.lower()
-        print("The current tweet is: " + current_tweet_text)
+        print("The current tweet is: '" + current_tweet_text + "'")
         check = False
         # Checks if the current tweet contains one of these variations of words
         for word in words:
             if word in current_tweet_text:
                 check = True
                 break
+        respond_to_tweets(check, current_tweet, recent_tweet)
 
-        if check:
-            print("Found Tweet!!!, currently retweeting and liking tweet..." + "\n")
-            message = ' Very Cool!!!'
-            api.update_status('@' + current_tweet.user.screen_name + message, in_reply_to_status_id=recent_tweet)
-            api.retweet(recent_tweet)
-            print("Tweet successfully retweeted!")
-        else:
-            print("tweet liked!")
+
+# Responds to tweet's that are showing in the home page and carries certain key-words.
+def respond_to_tweets(check, current_tweet, recent_tweet):
+    if check:
+        print("Found Tweet!!!, currently retweeting and liking tweet..." + "\n")
+        message = ' Very Cool!!!'
+        api.update_status('@' + current_tweet.user.screen_name + message, in_reply_to_status_id=recent_tweet)
+        api.retweet(recent_tweet)
+        print("Tweet successfully retweeted!")
+    else:
+        print("tweet liked!")
 
 
 # Main functions to run the program
