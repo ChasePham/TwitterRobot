@@ -144,7 +144,7 @@ def store_recent_retweet(latest_id):
 
 # Retweets important events and emergencies that are happening around campus. These are limited to people
 # I am following.
-def retweet_tweets():
+def retweet_tweets(listofusernames):
     print("Finding UT Austin related events to retweet and liking others...")
     recent_retweet = get_recent_retweet()
     all_tweets = api.home_timeline(since_id=recent_retweet, exclude_replies=True)
@@ -153,6 +153,10 @@ def retweet_tweets():
              'join', 'opportunity', 'come', 'gather', 'connect',
              'present', 'sign', 'invite', 'alert', 'don\'t miss', 'apply']
     for current_tweet in reversed(all_tweets):
+        # This if statement makes sure the tweet is from our following only, if not we continue to the
+        # next iteration.
+        if current_tweet.user.screen_name not in listofusernames:
+            continue
         recent_tweet = current_tweet.id
         store_recent_retweet(recent_tweet)
         api.create_favorite(recent_tweet)
@@ -185,14 +189,14 @@ def respond_to_tweets(check, current_tweet, recent_tweet):
 def main():
     # Quick Info functions:
     # find_individual_info('UTAustin')
-    # listofusernames = follow_people("")
+    listofusernames = follow_people("")
     # find_list_info()
 
     # Repetitive constant functions:
     while True:
         reply_to_mentions()
         print("")
-        retweet_tweets()
+        retweet_tweets(listofusernames)
         time.sleep(20)
         print("")
 
