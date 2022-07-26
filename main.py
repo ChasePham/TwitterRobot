@@ -150,7 +150,8 @@ def retweet_tweets():
     all_tweets = api.home_timeline(since_id=recent_retweet, exclude_replies=True)
     # Words that will are strongly related to an event happening, will retweet if word is in sentence.
     words = ['event', 'celebrate', 'emergency', 'celebration',
-             'join', 'opportunity', 'come', 'gather', 'connect', 'present', 'sign', 'invite', 'alert']
+             'join', 'opportunity', 'come', 'gather', 'connect',
+             'present', 'sign', 'invite', 'alert', 'don\'t miss', 'apply']
     for current_tweet in reversed(all_tweets):
         recent_tweet = current_tweet.id
         store_recent_retweet(recent_tweet)
@@ -171,7 +172,9 @@ def respond_to_tweets(check, current_tweet, recent_tweet):
     if check:
         print("Found Tweet!!!, currently retweeting and liking tweet..." + "\n")
         message = ' Very Cool!!!'
-        api.update_status('@' + current_tweet.user.screen_name + message, in_reply_to_status_id=recent_tweet)
+        # Auto_populate_to_reply mentions work together with in_reply_to_status_id to reply and update tweets
+        api.update_status('@' + current_tweet.user.screen_name + message,
+                          in_reply_to_status_id=recent_tweet, auto_populate_reply_metadata=True)
         api.retweet(recent_tweet)
         print("Tweet successfully retweeted!")
     else:
