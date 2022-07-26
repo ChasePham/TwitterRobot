@@ -103,7 +103,7 @@ def find_list_info(list_of_following):
 
 # Follows individual people and adds that to the list of followers
 def follow_people(person):
-    friends = api.get_friends(count=200) # max
+    friends = api.get_friends(count=200)  # max
     listofusernames = []
     for individual in friends:
         listofusernames.append(individual.screen_name)
@@ -213,4 +213,3 @@ main()
 # Do something when someone @'s this bot, this can be like a UT happy quote or something like that "CHECK"
 # In addition to function on top, when someone @'s and # something specific like "event", "CHECK"
 # we can retweet the post, and say that there is an event happening "CHECK"
-
