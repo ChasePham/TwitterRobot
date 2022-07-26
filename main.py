@@ -150,8 +150,18 @@ def retweet_tweets():
         recent_tweet = current_tweet.id
         store_recent_retweet(recent_tweet)
         api.create_favorite(recent_tweet)
-        if words in current_tweet.text.lower():
-            print("test good!!!!")
+        current_tweet_text = current_tweet.text.lower()
+        print(current_tweet_text)
+        check = False
+        # Checks if the current tweet contains one of these variations of words
+        for word in words:
+            if word in current_tweet_text:
+                check = True
+                break
+
+        if check:
+            print("Found Tweet!!!, currently retweeting...")
+            api.retweet(recent_tweet)
 
 
 # Main functions to run the program
