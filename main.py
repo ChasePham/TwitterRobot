@@ -155,7 +155,8 @@ def retweet_tweets(listofusernames):
     for current_tweet in reversed(all_tweets):
         # This if statement makes sure the tweet is from our following only, if not we continue to the
         # next iteration.
-        if current_tweet.user.screen_name not in listofusernames:
+        print(current_tweet.user.screen_name)
+        if not (current_tweet.user.screen_name in listofusernames):
             continue
         recent_tweet = current_tweet.id
         store_recent_retweet(recent_tweet)
