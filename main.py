@@ -199,7 +199,7 @@ def main():
         reply_to_mentions()
         print("")
         retweet_tweets(listofusernames)
-        time.sleep(20)
+        time.sleep(50)
         print("")
 
 
