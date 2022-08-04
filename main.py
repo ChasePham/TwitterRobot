@@ -60,6 +60,7 @@ def reply_to_mentions():
     print("")
 
 
+# Analyzes the mention of a tweet and checks with sentimental analysis if it is rude or good, then responds back
 def analyze_mention_tweet(current_mention, mention_analysis_total):
     if "hook" in current_mention.text.lower():
         print("A Hook Em is found!")
